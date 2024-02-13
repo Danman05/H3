@@ -1,0 +1,22 @@
+<div [style]="tableCenter">
+  <table>
+    <caption><h1>E-Car sales</h1></caption>
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Model</th>
+        <th>Quantity</th>
+        <th>Change(%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let car of carDataService.getItems()| async; let odd = odd; let even = even"
+        [ngClass]="{odd: odd, even: even}" [style.background]="odd ? oddColor : evenColor">
+        <td>{{car.rank}}</td>
+        <td>{{car.model}}</td>
+        <td>{{car.quantity}}</td>
+        <td>{{car.changeQuantityPercent}}%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
