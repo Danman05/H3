@@ -1,0 +1,19 @@
+<form [formGroup]="carFormData" (ngSubmit)="onCarSubmit()" class="container-sm d-flex flex-column">
+    <mat-form-field>
+        <mat-label>Rank</mat-label>
+        <input matInput type="text" formControlName="rank">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Model</mat-label>
+        <input matInput formControlName="model">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Quantity</mat-label>
+        <input matInput formControlName="quantity">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>changeQuantityPercent</mat-label>
+        <input matInput formControlName="changeQuantityPercent">
+    </mat-form-field>
+    <input type="submit" value="Submit" [disabled]="carFormData.invalid">
+</form>

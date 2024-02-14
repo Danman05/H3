@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "OiNj8szYXcL0zkHYQRervfjQuYKDVrD0fNaBmq16yt0=",
+  "Source": "carDataApi",
+  "BasePath": "_content/carDataApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
