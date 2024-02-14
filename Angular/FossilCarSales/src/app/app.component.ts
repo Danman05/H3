@@ -2,27 +2,35 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FossilCarsComponent } from './components/fossil-cars/fossil-cars.component';
 import { NewFossilCarComponent } from './components/new-fossil-car/new-fossil-car.component';
+import { CarApiService } from './services/car-api.service';
+import { CarService } from './services/car.service';
 import { Car } from './interfaces/Car';
-import { CarDataService } from './services/car-data.service';
-import { HttpClientModule } from '@angular/common/http';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FossilCarsComponent, NewFossilCarComponent, HttpClientModule],
+  imports: [RouterOutlet, FossilCarsComponent, NewFossilCarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   title = 'FossilCarSales';
+  constructor(private apiService: CarApiService, private carService: CarService) {}
 
-  constructor (private carService: CarDataService) {}
-  carData: Car[] = [];
-
-  ngOnInit(): void {
-    this.carService.getData().subscribe((data => {
-      console.log(data);
-    }))
+  carUpdate() {
+    this.getNewData();
+    console.log("Recieved updates, requesting new data!");
   }
 
+  ngOnInit(): void {
+    this.getNewData()
+  }
   
+  getNewData() {
+    this.apiService.DataGet().subscribe((cars: Car[] ) => {
+      next: {
+        this.carService.newCars(cars);
+      }
+    });
+  }
 }

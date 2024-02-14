@@ -1,0 +1,92 @@
+[
+    {
+      "rank": 1,
+      "Model": "Citroën C3",
+      "quantity": 2268,
+      "changeQuantityPercent": "-27%"
+    },
+    {
+      "rank": 2,
+      "Model": "Peugeot 208",
+      "quantity": 2107,
+      "changeQuantityPercent": "-24%"
+    },
+    {
+      "rank": 3,
+      "Model": "Kia Ceed/Xceed",
+      "quantity": 1750,
+      "changeQuantityPercent": "-1%"
+    },
+    {
+      "rank": 4,
+      "Model": "Ford Kuga",
+      "quantity": 1619,
+      "changeQuantityPercent": "-53%"
+    },
+    {
+      "rank": 5,
+      "Model": "Toyota Yaris",
+      "quantity": 1515,
+      "changeQuantityPercent": "-45%"
+    },
+    {
+      "rank": 6,
+      "Model": "VW T-Roc",
+      "quantity": 1435,
+      "changeQuantityPercent": "-7%"
+    },
+    {
+      "rank": 7,
+      "Model": "Mercedes-Benz C-klasse",
+      "quantity": 1361,
+      "changeQuantityPercent": "-9%"
+    },
+    {
+      "rank": 8,
+      "Model": "Hyundai i10",
+      "quantity": 1300,
+      "changeQuantityPercent": "-26%"
+    },
+    {
+      "rank": 9,
+      "Model": "Nissan Qashqai",
+      "quantity": 1246,
+      "changeQuantityPercent": "-42%"
+    },
+    {
+      "rank": 10,
+      "Model": "Toyota Yaris Cross",
+      "quantity": 1114,
+      "changeQuantityPercent": "100%"
+    },
+    {
+      "rank": 11,
+      "Model": "Toyota Aygo X",
+      "quantity": 1105,
+      "changeQuantityPercent": "100%"
+    },
+    {
+      "rank": 12,
+      "Model": "Peugeot 2008",
+      "quantity": 1067,
+      "changeQuantityPercent": "-29%"
+    },
+    {
+      "rank": 13,
+      "Model": "Hyundai i20",
+      "quantity": 1043,
+      "changeQuantityPercent": "3%"
+    },
+    {
+      "rank": 14,
+      "Model": "VW Polo",
+      "quantity": 1031,
+      "changeQuantityPercent": "-30%"
+    },
+    {
+      "rank": 15,
+      "Model": "Peugeot 3008",
+      "quantity": 1028,
+      "changeQuantityPercent": "-22%"
+    }
+  ]

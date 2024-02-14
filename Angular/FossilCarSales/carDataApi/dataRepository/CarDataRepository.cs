@@ -5,6 +5,7 @@ namespace carDataApi.dataRepository
 {
   public class CarDataRepository
   {
+     private readonly string constJsonFilePath = "./data/constCarData.json";
     private readonly string jsonFilePath = "./data/carData.json";
 
     /// <summary>
@@ -32,7 +33,7 @@ namespace carDataApi.dataRepository
       {
         string content = JsonConvert.SerializeObject(cars);
         File.WriteAllText(jsonFilePath, content);
-        return 201;
+        return 200;
       }
       catch (Exception) { return 500; }
     }
@@ -42,11 +43,11 @@ namespace carDataApi.dataRepository
     /// </summary>
     /// <param name="car"></param>
     /// <returns>Status code</returns>
-    public int JsonRemove(Car car)
+    public int JsonRemove(int id)
     {
       List<Car> cars = JsonGet().ToList();
-      Car? carToBeRemoved = cars.FirstOrDefault(x => x.Rank == car.Rank);
-      cars.Remove(car);
+      Car? carToBeRemoved = cars.FirstOrDefault(x => x.Rank == id);
+      cars.Remove(carToBeRemoved);
       return JsonSet(cars);
     }
 
@@ -62,6 +63,13 @@ namespace carDataApi.dataRepository
       cars.Remove(carToBeChanged);
       cars.Add(car);
       return JsonSet(cars);
+    }
+
+    public void JsonReset()
+    {
+      string jsonContent = File.ReadAllText(constJsonFilePath);
+
+      File.WriteAllText(jsonFilePath, jsonContent);
     }
   }
 }

@@ -1,2 +1,25 @@
-
-<p>fossil-cars works!</p>
+<div class="container d-flex flex-column">
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Model</th>
+                <th>Quantity</th>
+                <th>Change(%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let car of cars$ | async; let odd = odd; let even = even" [ngClass]="{odd: odd, even: even}"
+                [style.background]="odd ? oddColor : evenColor">
+                <td>{{car.rank}}</td>
+                <td>{{car.model}}</td>
+                <td>{{car.quantity}}</td>
+                <td>{{car.changeQuantityPercent}}</td>
+                <td><button class="btn btn-secondary" (click)="CarEdit(car)">&plus;</button></td>
+                <td><button class="btn btn-secondary" (click)="CarDelete(car)">&minus;</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <button (click)="CarReset()" class="btn btn-secondary">Reset Table</button>
+</div>

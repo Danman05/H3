@@ -27,6 +27,7 @@ public class Program
 
     app.UseAuthorization();
 
+    // Configure CORS, allow everything
     app.UseCors(options =>
     {
       options.AllowAnyHeader();
