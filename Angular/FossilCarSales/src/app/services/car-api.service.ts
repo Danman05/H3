@@ -8,9 +8,9 @@ import { Car } from '../interfaces/Car';
 })
 export class CarApiService {
 
-  port: string = "7140";
+  port: string = "5162";
 
-  apiString: string = `https://localhost:${this.port}/car`;
+  apiString: string = `http://localhost:${this.port}/car`;
 
   constructor(private httpClient: HttpClient) { }
 
