@@ -8,9 +8,9 @@ import { Car } from '../interfaces/Car';
 })
 export class CarApiService {
 
-  port: string = "5162";
+  port: string = "7140";
 
-  apiString: string = `http://localhost:${this.port}/car`;
+  apiString: string = `https://localhost:${this.port}/car`;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -22,6 +22,9 @@ export class CarApiService {
   }
   public DataDelete(car: Car) : Observable<Car>{
     return this.httpClient.delete<Car>(`${this.apiString}/${car.rank}`);
+  }
+  public DataEdit(oldCar: Car, newCar: Car): Observable<Car> {
+    return this.httpClient.post<Car>(`${this.apiString}/edit`, [oldCar, newCar]);
   }
   public DataReset() {
     return this.httpClient.get(`${this.apiString}/reset`);

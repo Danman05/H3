@@ -20,7 +20,7 @@ public class CarDataController : ControllerBase
   [HttpGet]
   public IEnumerable<Car>? CarGet()
   {
-    return _carData.JsonGet();
+    return _carData.JsonGet().OrderBy(x => x.Rank);
   }
 
   /// <summary>
@@ -78,16 +78,19 @@ public class CarDataController : ControllerBase
   /// </summary>
   /// <param name="car"></param>
   /// <returns></returns>
-  [HttpPut]
-  public IActionResult CarEdit(Car car)
+  [HttpPost]
+  [Route("edit")]
+  public IActionResult CarEdit(Car[] cars)
   {
-    int statusCode = _carData.JsonEdit(car);
-    if (statusCode >= 200 && statusCode < 300)
-    {
-                  _logger.LogInformation("Data has been removed from JSON");
-      return Ok();
-    }
-    return StatusCode(statusCode);
+    _carData.JsonEdit(cars);
+    return Ok();
+    //int statusCode = _carData.JsonEdit(car);
+    //if (statusCode >= 200 && statusCode < 300)
+    //{
+    //              _logger.LogInformation("Data has been removed from JSON");
+    //  return Ok();
+    //}
+    //return StatusCode(statusCode);
   }
 
 }

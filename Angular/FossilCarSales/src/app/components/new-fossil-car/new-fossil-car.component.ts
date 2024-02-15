@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CarApiService } from '../../services/car-api.service';
@@ -9,7 +8,7 @@ import { CarApiService } from '../../services/car-api.service';
 @Component({
   selector: 'app-new-fossil-car',
   standalone: true,
-  imports: [MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './new-fossil-car.component.html',
   styleUrl: './new-fossil-car.component.css'
 })

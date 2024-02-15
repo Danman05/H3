@@ -56,12 +56,12 @@ namespace carDataApi.dataRepository
     /// </summary>
     /// <param name="car"></param>
     /// <returns>Status code</returns>
-    public int JsonEdit(Car car)
+    public int JsonEdit(Car[] car)
     {
       List<Car> cars = JsonGet().ToList();
-      Car? carToBeChanged = cars.FirstOrDefault(x => x.Rank == car.Rank);
+      Car? carToBeChanged = cars.FirstOrDefault(x => x.Rank == car[0].Rank);
       cars.Remove(carToBeChanged);
-      cars.Add(car);
+      cars.Add(car[1]);
       return JsonSet(cars);
     }
 
