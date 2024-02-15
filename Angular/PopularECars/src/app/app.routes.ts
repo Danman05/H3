@@ -1,10 +1,29 @@
 import { Routes } from '@angular/router';
-import { FossilCarsComponent } from './components/fossil-cars/fossil-cars.component';
-import { NewFossilCarComponent } from './components/new-fossil-car/new-fossil-car.component';
+import { AdminComponent } from './components/admin/admin.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { FossilCarsComponent } from './components/fossil-cars/fossil-cars.component';
+
+const adminGuard = (): boolean => {
+    return false
+}
 
 export const routes: Routes = [
-    { path: '', component: FossilCarsComponent },
-    { path: 'admin', component: NewFossilCarComponent},
-    { path: '**', component: ErrorPageComponent}
+    {
+        path: 'admin',
+        component: AdminComponent,
+        canActivate: [adminGuard]
+    },
+    {
+        path: '',
+        component: FossilCarsComponent
+    },
+    {
+        path: 'error',
+        component: ErrorPageComponent
+    },
+    {
+        path: '**',
+        redirectTo: "error",
+        pathMatch: "full"
+    }
 ];

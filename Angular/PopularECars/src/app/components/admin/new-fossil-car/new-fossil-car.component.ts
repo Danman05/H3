@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { CarApiService } from '../../services/car-api.service';
+import { CarApiService } from '../../../services/car-api.service';
+import { CarService } from '../../../services/car.service';
 
 @Component({
   selector: 'app-new-fossil-car',
@@ -17,9 +18,9 @@ export class NewFossilCarComponent implements OnInit {
   carFormData!: FormGroup
 
   // Event Emitter
-  @Output() carUpdate: EventEmitter<null>= new EventEmitter<null>();
+  @Output() carUpdate: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor(private apiService: CarApiService) {}
+  constructor(private apiService: CarApiService, private carService: CarService) { }
 
   ngOnInit(): void {
 
@@ -27,25 +28,25 @@ export class NewFossilCarComponent implements OnInit {
     this.carFormData = new FormGroup({
       rank: new FormControl('',
         Validators.required
-        ),
+      ),
       model: new FormControl('',
-      Validators.required
+        Validators.required
       ),
       quantity: new FormControl('',
-      Validators.required
+        Validators.required
       ),
       changeQuantityPercent: new FormControl('',
-      Validators.required)
+        Validators.required)
     })
   }
 
   // Form submit
   onCarSubmit(): void {
     if (this.carFormData.valid) {
-      console.log(this.carFormData.value);
       this.apiService.DataNew(this.carFormData.value).subscribe(() => {
         next: {
-          this.carUpdate.emit();
+          this.carService.NewData();
+          this.carUpdate.emit("New car has been created!");
         }
       });
     }

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
-import { Car } from '../../../interfaces/Car';
+import { Car } from '../../../../interfaces/Car';
 
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
