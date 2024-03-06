@@ -1,9 +1,16 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_application_1/classes/counter_model.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => CounterModel(),
+      child: const MyApp(),
+      ),
+    );
 }
 
 class MyApp extends StatelessWidget {
@@ -57,40 +64,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-
-      _checkCounter();
-    });
-  }
-
-  void _decrementCounter() {
-    setState(() {
-      _counter <= 0 ? _counter = 0 : _counter--;
-
-      _checkCounter();
-    });
-  }
-
-  void _checkCounter() {
-if (_counter % 3 == 0) { // Checks if the counter is a multiple of 3
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$_counter is a multiple of 3!'),
-        duration: Duration(seconds: 2),
-      ),
-    ); 
- }
-}
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -112,7 +85,8 @@ if (_counter % 3 == 0) { // Checks if the counter is a multiple of 3
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
+        child:Consumer<CounterModel>(
+              builder: (context, countModel, child) => Column(
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
@@ -128,18 +102,28 @@ if (_counter % 3 == 0) { // Checks if the counter is a multiple of 3
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+
             const Text(
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '${countModel.count}',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children:  [
                 FloatingActionButton(
-                  onPressed: _incrementCounter,
+                  onPressed: () {
+                    context.read<CounterModel>().incrementCounter();
+                    if (context.read<CounterModel>().isDivisibleByThree()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Count ${countModel.count} is divisible by 3'),
+                          duration: const Duration(milliseconds: 300) ,),
+                      );
+                    }
+                  },
                   tooltip: 'Increment',
                   backgroundColor: Colors.deepPurple.shade300,
                   child: const Icon(
@@ -148,7 +132,7 @@ if (_counter % 3 == 0) { // Checks if the counter is a multiple of 3
                   ),
                 ),
                 FloatingActionButton(
-                  onPressed: _decrementCounter,
+                  onPressed: () => context.read<CounterModel>().decrementCounter(),
                   tooltip: "Decrement",
                   backgroundColor: Colors.deepPurple.shade300,
                   child: const Icon(
@@ -159,6 +143,7 @@ if (_counter % 3 == 0) { // Checks if the counter is a multiple of 3
               ],
             )
           ],
+              ),
         ),
       ),
        // This trailing comma makes auto-formatting nicer for build methods.
