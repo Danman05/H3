@@ -16,6 +16,8 @@ class CounterModel extends ChangeNotifier {
     // Count decrement method
     void decrementCounter() {
       _count <= 0 ? _count = 0 : _count--;
+
+      notifyListeners();
     }
 
     // Modulus method
