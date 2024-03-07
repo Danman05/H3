@@ -1,18 +1,24 @@
-import 'dart:js';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/future_screen.dart';
+import 'package:flutter_application_1/screens/provider_screen.dart';
+import 'package:flutter_application_1/screens/stream_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 // Local file imports
-import 'package:flutter_application_1/classes/counter_model.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/screens/stateful_screen.dart';
+import 'package:flutter_application_1/classes/counter_model.dart';
+import 'package:flutter_application_1/screens/bloc_screen.dart';
 
 void main() {
   runApp(
-    const MyApp()
-  );
+    ChangeNotifierProvider(
+      create: (context) => CounterModel(),
+      child: const MyApp(),
+      ),
+    );
 }
 
 final GoRouter _router = GoRouter(
@@ -30,9 +36,27 @@ final GoRouter _router = GoRouter(
           },
         ),
         GoRoute(
+          path: 'provider',
+          builder: (BuildContext context, GoRouterState state) {
+            return const ProviderScreen();
+          },
+        ),
+        GoRoute(
           path: 'bloc',
           builder: (BuildContext context, GoRouterState state ) {
-            return const StatefulScreen();
+            return const BlocScreen();
+          },
+        ),
+        GoRoute(
+          path: 'future',
+          builder: (BuildContext context, GoRouterState state) {
+            return const FutureScreen();
+          },
+        ),
+        GoRoute(
+          path: 'stream',
+          builder: (BuildContext context, GoRouterState state) {
+            return const StreamScreen();
           },
         ),
       ],
