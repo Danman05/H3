@@ -1,8 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/bloc/counter_bloc.dart';
+import 'package:flutter_application_1/bloc/random_counter_bloc.dart';
 import 'package:flutter_application_1/screens/future_screen.dart';
 import 'package:flutter_application_1/screens/provider_screen.dart';
 import 'package:flutter_application_1/screens/stream_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,7 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/screens/stateful_screen.dart';
 import 'package:flutter_application_1/classes/counter_model.dart';
-import 'package:flutter_application_1/screens/bloc_screen.dart';
+import 'package:flutter_application_1/screens/blocs/blocRandom_screen.dart';
 
 void main() {
   runApp(
@@ -44,7 +47,17 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'bloc',
           builder: (BuildContext context, GoRouterState state ) {
-            return const BlocScreen();
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => CounterBloc(),
+                ),
+                BlocProvider(
+                  create: (context) => RandomCounterBloc(),
+                ),
+              ],
+              child: const BlocScreen(),
+            );
           },
         ),
         GoRoute(
