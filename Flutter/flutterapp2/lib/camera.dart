@@ -1,20 +1,12 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:provider/provider.dart';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp2/camera_singleton.dart';
-import 'package:flutterapp2/classes/photo_provider.dart';
-
 /// Stateful widget class
 class CameraPage extends StatefulWidget {
-  const CameraPage({super.key, required this.camera});
-
-  final CameraDescription camera;
+  const CameraPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -39,7 +31,6 @@ class _CameraPageState extends State<CameraPage> {
       CameraSingleton().camera!,
       // Define the resolution to use.
       ResolutionPreset.medium,
-    
     );
 
     // Next, initialize the controller. This returns a Future.
@@ -92,9 +83,8 @@ class _CameraPageState extends State<CameraPage> {
             final image = await _controller.takePicture();
 
             final bytes = await File(image.path).readAsBytes();
-            
+
             final String base64 = base64Encode(bytes);
-            print(image.name);
             await _storage.write(key: image.name, value: base64);
             String? data = await _storage.read(key: image.name);
             print(data);
@@ -107,16 +97,8 @@ class _CameraPageState extends State<CameraPage> {
             // Update the PhotoProvider with the new image path
             // Provider.of<PhotoProvider>(context, listen: false).addToList(image.path);
             // print("added ${image.path}");
+            
             // If the picture was taken, display it on a new screen.
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => DisplayPictureScreen(
-                  // Pass the automatically generated path to
-                  // the DisplayPictureScreen widget.
-                  imagePath: image.path,
-                ),
-              ),
-            );
           } catch (e) {
             // If an error occurs, log the error to the console.
             print(e);
@@ -141,7 +123,7 @@ class DisplayPictureScreen extends StatelessWidget {
       // constructor with the given path to display the image.
       
       body: 
-        Image.file(File(imagePath),
+        Image.file(File(imagePath),      
       )
     );
   }
