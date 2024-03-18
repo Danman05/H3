@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlutterImageAPI", "FlutterImageAPI.csproj", "{EA27E9C2-2D4A-41B5-B2E9-48F2E840C8EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlutterImageAPITest", "..\FlutterImageAPITest\FlutterImageAPITest.csproj", "{A1C59119-49A0-46D3-82A8-8632B82852BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA27E9C2-2D4A-41B5-B2E9-48F2E840C8EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA27E9C2-2D4A-41B5-B2E9-48F2E840C8EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA27E9C2-2D4A-41B5-B2E9-48F2E840C8EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA27E9C2-2D4A-41B5-B2E9-48F2E840C8EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1C59119-49A0-46D3-82A8-8632B82852BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1C59119-49A0-46D3-82A8-8632B82852BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1C59119-49A0-46D3-82A8-8632B82852BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1C59119-49A0-46D3-82A8-8632B82852BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {751E5708-B35A-4A07-B601-DC1E1DA43038}
+	EndGlobalSection
+EndGlobal

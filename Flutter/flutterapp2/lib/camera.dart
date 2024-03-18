@@ -1,9 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutterapp2/classes/credentials.dart';
+import 'package:flutterapp2/service/photo_api.dart';
+import 'package:universal_io/io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp2/camera_singleton.dart';
+import 'package:flutter/foundation.dart';
+
 /// Stateful widget class
 class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
@@ -16,11 +22,13 @@ class CameraPage extends StatefulWidget {
 
 /// Companion state class
 class _CameraPageState extends State<CameraPage> {
-
-  final _storage = const FlutterSecureStorage();
+  // Not in use,
+  // final _storage = const FlutterSecureStorage();
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  final ApiService _apiService = ApiService();
 
+  late String apiResultTxt = "";
   @override
   void initState() {
     super.initState();
@@ -44,32 +52,67 @@ class _CameraPageState extends State<CameraPage> {
     super.dispose();
   }
 
+  // Top-level function to encode image bytes to base64 string
+  Future<String> encodeImageToBase64(Uint8List imageBytes) async {
+    return base64Encode(imageBytes);
+  }
+
+  void _showApiResult(String result) {
+    setState(() {
+      apiResultTxt = result;
+    });
+  }
+  Future<String> _login () {
+    Credentials cred = const Credentials(username: "user", privateKey: "SecurePa\$\$");
+
+    return _apiService.login(cred);
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Camera Page"),
-        ),
-        body: Center(
-          child: FutureBuilder(
+      appBar: AppBar(
+        title: const Text("Camera Page"),
+      ),
+      body: Center(
+        child: FutureBuilder(
             future: _initializeControllerFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 // If the Future is complete, display the preview.
-                return CameraPreview(_controller);
+                return ListView(
+                  children: <Widget> [
+                    CameraPreview(_controller),
+                    
+                    FutureBuilder<String>(
+                        future: _login(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            print(snapshot.data);
+                            return const Text("logged in");
+                          } else {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                        }),
+                        Text(apiResultTxt)   
+                  ],
+                );
+                // return CameraPreview(_controller);
               } else {
                 // Otherwise, display a loading indicator.
                 return const Column(
-                  children: <Widget> [
+                  children: <Widget>[
                     Text("Loading Camera"),
                     CircularProgressIndicator(),
                   ],
                 );
               }
-            }
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
+            },
+         ),
+      ),
+      
+      floatingActionButton: FloatingActionButton(
+        key: const Key('take_picture_fab'),
         // Provide an onPressed callback.
         onPressed: () async {
           // Take the Picture in a try / catch block. If anything goes wrong,
@@ -84,31 +127,30 @@ class _CameraPageState extends State<CameraPage> {
 
             final bytes = await File(image.path).readAsBytes();
 
+            // final String base64 = base64Encode(bytes);
+
             final String base64 = base64Encode(bytes);
-            await _storage.write(key: image.name, value: base64);
-            String? data = await _storage.read(key: image.name);
-            print(data);
-            // Image.memory(base64Decode(base64));
-            // print(base64);
-            // print(base64Decode(base64));
-            // final file = File();
+
+            final String apiResult = await _apiService.addImage(base64);
+            _showApiResult(apiResult);
             if (!context.mounted) return;
 
             // Update the PhotoProvider with the new image path
             // Provider.of<PhotoProvider>(context, listen: false).addToList(image.path);
             // print("added ${image.path}");
-            
+
             // If the picture was taken, display it on a new screen.
           } catch (e) {
             // If an error occurs, log the error to the console.
-            print(e);
+            print("error in camera");
           }
         },
         child: const Icon(Icons.camera_alt),
       ),
-      );
+    );
   }
 }
+
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
@@ -118,13 +160,12 @@ class DisplayPictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Display the Picture')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      
-      body: 
-        Image.file(File(imagePath),      
-      )
-    );
+        appBar: AppBar(title: const Text('Display the Picture')),
+        // The image is stored as a file on the device. Use the `Image.file`
+        // constructor with the given path to display the image.
+
+        body: Image.file(
+          File(imagePath),
+        ));
   }
 }

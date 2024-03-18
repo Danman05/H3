@@ -1,40 +1,15 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:flutterapp2/camera.dart';
-import 'package:flutterapp2/camera_singleton.dart';
-import 'package:flutterapp2/gallery_screen.dart';
 import 'package:go_router/go_router.dart';
 
-final GoRouter _router = GoRouter(
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/',
-      builder: (BuildContext context, GoRouterState state) {
-        return const MyHomePage(
-          title: "Home Page",
-        );
-      },
-      routes: <RouteBase>[
-        GoRoute(
-          path: 'camera',
-          builder: (BuildContext context, GoRouterState state) {
-            return const CameraPage();
-          },
-        ),
-        GoRoute(
-          path: 'gallery',
-          builder: (BuildContext context, GoRouterState state) {
-            return const GalleryScreen();
-          },
-        ),
-      ]
-    ),
-  ],
-);
+import 'package:flutterapp2/camera.dart';
+import 'package:flutterapp2/camera_singleton.dart';
+import 'package:flutterapp2/gallery_widget.dart';
 
-Future<void> main() async {
-  // Ensure that plugin services are initialized so that `availableCameras()`
+
+Future<void> main() async{
+
+    // Ensure that plugin services are initialized so that `availableCameras()`
   // can be called before `runApp()`
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -44,20 +19,45 @@ Future<void> main() async {
   // Get a specific camera from the list of available cameras.
   final firstCamera = cameras.first;
   CameraSingleton().camera = firstCamera;
+  runApp(MyApp());
+}
 
-  if (kDebugMode) {
-    print("singleton cam ${CameraSingleton().camera}");
-  }
-  runApp(
-    MaterialApp.router(
-      routerConfig: _router,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-    ),
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  final GoRouter _router = GoRouter(
+    routes: <RouteBase>[
+      GoRoute(
+          path: '/',
+          builder: (BuildContext context, GoRouterState state) {
+            return const MyHomePage(
+              title: "Home Page",
+            );
+          },
+          routes: <RouteBase>[
+            GoRoute(
+              path: 'camera',
+              builder: (BuildContext context, GoRouterState state) {
+                return const CameraPage();
+              },
+            ),
+            GoRoute(
+              path: 'gallery',
+              builder: (BuildContext context, GoRouterState state) {
+                return const GalleryWidget();
+              },
+            ),
+          ]),
+    ],
   );
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routerConfig: _router,
+      title: 'Flutter Web App',
+    );
+  }
 }
 
 class MyHomePage extends StatefulWidget {
