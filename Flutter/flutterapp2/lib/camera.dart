@@ -132,6 +132,7 @@ class _CameraPageState extends State<CameraPage> {
             final String base64 = base64Encode(bytes);
 
             final String apiResult = await _apiService.addImage(base64);
+
             _showApiResult(apiResult);
             if (!context.mounted) return;
 
@@ -142,7 +143,7 @@ class _CameraPageState extends State<CameraPage> {
             // If the picture was taken, display it on a new screen.
           } catch (e) {
             // If an error occurs, log the error to the console.
-            print("error in camera");
+            print("error in camera $e");
           }
         },
         child: const Icon(Icons.camera_alt),
