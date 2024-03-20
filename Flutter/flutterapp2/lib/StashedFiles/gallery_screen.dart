@@ -1,6 +1,7 @@
 // A widget that displays the picture taken by the user.
 import 'dart:convert';
 import 'package:flutterapp2/StashedFiles/image_droptarget.dart';
+import 'package:flutterapp2/models/photo.dart';
 import 'package:flutterapp2/service/photo_api.dart';
 import 'package:flutter/material.dart';
 class GalleryScreen extends StatefulWidget {
@@ -12,7 +13,7 @@ class GalleryScreen extends StatefulWidget {
 }
 class _GalleryScreenState extends State<GalleryScreen> {
   String acceptedData = "";
-  final ApiService _apiService = ApiService();
+  final PhotoService _apiService = PhotoService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,8 +21,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
         ),
         // The image is stored as a file on the device. Use the `Image.file`
         // constructor with the given path to display the image.
-       body: FutureBuilder<List<String>>(
-          future: _apiService.getAllImages(),
+       body: FutureBuilder<List<Photo>>(
+          future: _apiService.getAll(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
               final images = snapshot.data!.toList();
@@ -45,7 +46,7 @@ return Column(
                     children: List<Widget>.generate(
                       images.length,
                       (index) {
-                        final String base64Image = images[index];
+                        final String base64Image = images[index].base64;
                         return LongPressDraggable(
                           data: base64Image,
                           feedback: SizedBox( // Feedback is the currently dragged element

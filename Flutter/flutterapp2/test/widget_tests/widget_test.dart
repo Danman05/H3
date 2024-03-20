@@ -7,11 +7,11 @@ void main() {
   group('Widget Tests', () {
 
     testWidgets('Verify widget existence', (widgetTester) async {
-      await widgetTester.pumpWidget(MaterialApp(home: MyHomePage(title: "Widget Test")));
+      await widgetTester.pumpWidget(const MaterialApp(home: MyHomePage(title: "Widget Test")));
 
-      Finder fab = find.byType(Scaffold);
+      Finder widget = find.byType(Scaffold);
 
-      expect(fab, findsOneWidget);
+      expect(widget, findsOneWidget);
     });
   });
 }

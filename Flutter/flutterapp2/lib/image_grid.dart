@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutterapp2/models/photo.dart';
 
 class ImageGrid extends StatefulWidget {
-  final List<String>? images;
+  final List<Photo>? images;
 
   const ImageGrid({super.key, required this.images});
   @override
@@ -11,7 +12,7 @@ class ImageGrid extends StatefulWidget {
 
 class _ImageGridState extends State<ImageGrid> {
   final List<String> _droppedImages = [];
-    Map<int, String> droppedImages = {}; // Maps grid index to base64 image string
+  Map<int, String> droppedImages = {}; // Maps grid index to base64 image string
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +24,11 @@ class _ImageGridState extends State<ImageGrid> {
       itemCount: _droppedImages.isEmpty ? 1 : _droppedImages.length,
       itemBuilder: (context, index) {
         return DragTarget(
-            onAcceptWithDetails: (DragTargetDetails<String> image) {
-              setState(() {
-                _droppedImages.add(image.data);
-              });
-            },
+          onAcceptWithDetails: (DragTargetDetails<String> image) {
+            setState(() {
+              _droppedImages.add(image.data);
+            });
+          },
           builder: (
             BuildContext context,
             List<dynamic> accepted,
@@ -37,15 +38,16 @@ class _ImageGridState extends State<ImageGrid> {
                 ? Image.memory(base64Decode(accepted.first))
                 : _droppedImages.isNotEmpty
                     ? LongPressDraggable(
-                      data: _droppedImages[index],
-                      feedback: Image.memory(base64Decode(_droppedImages[index])),
-                      child: Image.memory(base64Decode(_droppedImages[index])))
+                        data: _droppedImages[index],
+                        feedback:
+                            Image.memory(base64Decode(_droppedImages[index])),
+                        child:
+                            Image.memory(base64Decode(_droppedImages[index])))
                     // Image.memory(base64Decode(_droppedImages[index]))
                     : Container(color: Colors.grey[200]);
           },
         );
       },
-      
     );
   }
 }

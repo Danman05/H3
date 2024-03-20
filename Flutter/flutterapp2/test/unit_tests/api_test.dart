@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutterapp2/service/mock_api.dart';
+import 'package:flutterapp2/service/mock_photo_api.dart';
 
 // final ApiService _apiService = ApiService();
-final MockClient _mockClient = MockClient(); // Mock API
+final MockPhotoService _mockClient = MockPhotoService(); // Mock API
 void main() async {
   //
   group('API Service Tests', () {
@@ -19,7 +19,7 @@ void main() async {
     });
 
     test('Get All images, collection of strings on retrival', () async {
-      final List<String> result = await MockClient().getAll();
+      final List<String> result = await _mockClient.getAll();
       expect(result.isNotEmpty, true );
     });
 

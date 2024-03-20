@@ -22,7 +22,7 @@ namespace FlutterImageAPI.Repositories
         }
 
         public void Delete()
-        {
+        {   
             throw new NotImplementedException();
         }
 

@@ -1,9 +1,12 @@
 
+using FirebaseAdmin;
 using FlutterImageAPI.Interfaces;
 using FlutterImageAPI.Repositories;
 using FlutterImageAPI.Services;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 using System.Text;
 
 namespace FlutterImageAPI
@@ -17,6 +20,14 @@ namespace FlutterImageAPI
             string jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
             string jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
             string jwtAudience = builder.Configuration.GetSection("Jwt:Audience").Get<string>();
+
+
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.FromFile("D:\\Coding\\H3\\H3\\Flutter\\FlutterImageAPI\\my-first-firebase-e4fc9-firebase-adminsdk-cfum7-a2b563b97b.json"),
+                ProjectId = "my-first-firebase-e4fc9",
+            });
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -24,7 +35,8 @@ namespace FlutterImageAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Add Image Repository so we can depency inject it
+
+            // Dependency injection
             builder.Services.AddSingleton<ImageRepository>();
             builder.Services.AddTransient<JwtService>();
 
@@ -45,7 +57,9 @@ namespace FlutterImageAPI
                     ValidIssuer = jwtIssuer,
                     ValidAudience = jwtAudience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.Zero // remove clockskew, mostly for testing purposes.
+                                              // If JWT token is set to expire in 1 minute,
+                                              // Then it will not expire because ClockSkew has a defualt value of 5 minutes
                 };
             });
 

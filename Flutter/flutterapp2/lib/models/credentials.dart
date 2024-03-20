@@ -1,3 +1,7 @@
+/*
+  Credential Model
+ */
+
 class Credentials {
 
   final String username;

@@ -39,7 +39,7 @@ namespace FlutterImageAPI.Services
                 _audience,
                 claims,
                 null,
-                DateTime.Now.AddMinutes(5),
+                DateTime.Now.AddSeconds(15),
                 credentials
             );
 

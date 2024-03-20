@@ -18,6 +18,7 @@ namespace FlutterImageAPI.Data
         {
             get
             {
+                // locks obj to make it thread safe
                 lock (obj)
                     {
                         if (instance == null)

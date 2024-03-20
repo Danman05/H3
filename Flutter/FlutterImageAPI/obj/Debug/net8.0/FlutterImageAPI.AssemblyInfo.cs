@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FlutterImageAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21293aa72b9f23a63ee0ee60112df8e0b98d2bb4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8fd960e97ad06d2e2c9d86358c0fc3650cf0e423")]
 [assembly: System.Reflection.AssemblyProductAttribute("FlutterImageAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FlutterImageAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

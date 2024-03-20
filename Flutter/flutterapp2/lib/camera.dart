@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutterapp2/classes/credentials.dart';
-import 'package:flutterapp2/service/photo_api.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapp2/blocs/photo_bloc.dart';
+import 'package:flutterapp2/blocs/photo_event.dart';
+import 'package:flutterapp2/models/credentials.dart';
+import 'package:flutterapp2/service/auth_service.dart';
 import 'package:universal_io/io.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp2/camera_singleton.dart';
@@ -26,7 +28,7 @@ class _CameraPageState extends State<CameraPage> {
   // final _storage = const FlutterSecureStorage();
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
-  final ApiService _apiService = ApiService();
+  final AuthService _authService = AuthService();
 
   late String apiResultTxt = "";
   @override
@@ -64,12 +66,13 @@ class _CameraPageState extends State<CameraPage> {
   }
   Future<String> _login () {
     Credentials cred = const Credentials(username: "user", privateKey: "SecurePa\$\$");
-
-    return _apiService.login(cred);
-
+    return _authService.login(cred);
   }
   @override
   Widget build(BuildContext context) {
+
+    final PhotoBloc photoBloc = BlocProvider.of<PhotoBloc>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Camera Page"),
@@ -83,18 +86,13 @@ class _CameraPageState extends State<CameraPage> {
                 return ListView(
                   children: <Widget> [
                     CameraPreview(_controller),
-                    
-                    FutureBuilder<String>(
-                        future: _login(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
-                            print(snapshot.data);
-                            return const Text("logged in");
-                          } else {
-                            return const Center(child: CircularProgressIndicator());
-                          }
-                        }),
-                        Text(apiResultTxt)   
+                    ElevatedButton(
+                        onPressed: () async {
+                          _showApiResult(await _login());
+                        },
+                    child:const Text('Login'),
+                      ),
+                    Text(apiResultTxt),
                   ],
                 );
                 // return CameraPreview(_controller);
@@ -110,7 +108,6 @@ class _CameraPageState extends State<CameraPage> {
             },
          ),
       ),
-      
       floatingActionButton: FloatingActionButton(
         key: const Key('take_picture_fab'),
         // Provide an onPressed callback.
@@ -131,9 +128,9 @@ class _CameraPageState extends State<CameraPage> {
 
             final String base64 = base64Encode(bytes);
 
-            final String apiResult = await _apiService.addImage(base64);
-
-            _showApiResult(apiResult);
+            photoBloc.add(AddPhotoEvent(base64));
+            // final String apiResult = await _apiService.add(base64);
+            // _showApiResult(apiResult);
             if (!context.mounted) return;
 
             // Update the PhotoProvider with the new image path
@@ -143,7 +140,7 @@ class _CameraPageState extends State<CameraPage> {
             // If the picture was taken, display it on a new screen.
           } catch (e) {
             // If an error occurs, log the error to the console.
-            print("error in camera $e");
+            debugPrint("error in camera $e");
           }
         },
         child: const Icon(Icons.camera_alt),

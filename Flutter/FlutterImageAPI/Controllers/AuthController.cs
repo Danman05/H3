@@ -12,7 +12,6 @@ namespace FlutterImageAPI.Controllers
     {
 
         JwtService _jwtService;
-
         public AuthController(JwtService jwtService)
         {
             _jwtService = jwtService;

@@ -2,71 +2,72 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutterapp2/classes/credentials.dart';
-import 'package:flutterapp2/classes/photo.dart';
+import 'package:flutterapp2/models/photo.dart';
 import 'package:universal_io/io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutterapp2/data/repository/photo_repo_interface.dart';
+class PhotoService implements IPhotoRepo {
+  late String _baseUrl; // Initialized in constructor
 
-class ApiService {
-  static String _baseUrl = 'http://10.0.2.2:5135/api';
   HttpClient httpClient = HttpClient();
+
   final FlutterSecureStorage _flutterSecureStorage =
-      const FlutterSecureStorage();
+      const FlutterSecureStorage(); // FSS used to store and read
 
-
-  ApiService() {
+  PhotoService() {
     if (kIsWeb) {
       _baseUrl = 'http://127.0.0.1:5135/api';
-    }
-    else {
+    } else {
       _baseUrl = 'http://10.0.2.2:5135/api';
     }
   }
-  
+
   // Fetches a list of images (as base64 strings) from the API
-  Future<List<String>> getAllImages() async {
-    List<String> result = [];
+  @override
+  Future<List<Photo>> getAll() async {
     try {
-        HttpClientRequest request =
-            await httpClient.getUrl(Uri.parse('$_baseUrl/image/all'));
 
-        HttpClientResponse response = await request.close();
+      HttpClientRequest request =
+          await httpClient.getUrl(Uri.parse('$_baseUrl/image/all'));
 
-        String responseBody = await response.transform(utf8.decoder).join();
-        if (response.statusCode == 200) {
-          var decodedJson = jsonDecode(responseBody);
+      HttpClientResponse response = await request.close();
 
-          List<Photo> mappedJson = List<Photo>.from(
-              decodedJson.map((photoJson) => Photo.fromJson(photoJson)));
+      String responseBody = await response.transform(utf8.decoder).join();
 
-          for (var i = 0; i < mappedJson.length; i++) {
-            result.add(mappedJson[i].base64);
-          }
-        } else {
-          // Handle failure or error response codes
-          print(
-              'Failed to get all images: $responseBody ${response.statusCode}');
-        }
-      
+      if (response.statusCode >= 200 || response.statusCode < 300) {
+        List<dynamic> decodedJson = jsonDecode(responseBody);
+
+        return decodedJson
+            .map((jsonItem) => Photo.fromMap(jsonItem as Map<String, dynamic>))
+            .toList();
+
+      } else {
+        // Handle failure or error response codes
+        throw Exception("Status code: ${response.statusCode}");
+      }
     } catch (e) {
-      print('Error getting images: $e');
-    } finally {
-      httpClient.close();
-    }
-    return result;
+      debugPrint('Error getting images: $e');
+      return [];
+    } 
+    // finally {
+    //   httpClient.close();
+    // }
   }
 
   // Sends a base64 encoded image to the API
-  Future<String> addImage(String base64string) async {
+  @override
+  Future<void> add(String base64string) async {
     try {
+
       // Construct the POST request
       final request =
           await httpClient.postUrl(Uri.parse("$_baseUrl/image/add"));
 
-      // Add headers for content-type.
+      // Add request headers, Authorization & contentType
       request.headers.set(HttpHeaders.authorizationHeader,
-          'Bearer ${_flutterSecureStorage.read(key: 'Authorization')}');
+      'Bearer ${await _flutterSecureStorage.read(key: 'Authorization')}');
       request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
+
       // Payload. Mapped key value pairs.
       Map<String, String> jsonPayload = {
         "base64": base64string,
@@ -77,56 +78,23 @@ class ApiService {
       request.add(utf8.encode(jsonEncode(jsonPayload)));
 
       // Send the request and wait for the response.
-      final response = await request.close();
+      await request.close();
 
-      // Read the response.
-      if (response.statusCode == HttpStatus.ok) {
-        return "Image taken succesfully";
-      } else if (response.statusCode == HttpStatus.forbidden ||
-          response.statusCode == HttpStatus.unauthorized) {
-        return "Not authorized to take picture";
-      } else {
-        return "Error taking picture";
-      }
+      // Read the response
+      // switch (response.statusCode) {
+      //   case HttpStatus.ok: // Write JWT to FSS
+      //     return "Image taken!";
+      //   case HttpStatus.unauthorized:
+      //     return "Not authorized to save picture";
+      //   case HttpStatus.forbidden:
+      //     return "Forbidden";
+      //   case HttpStatus.badRequest:
+      //     return "Bad Request";
+      //   default:
+      //     return "Unknown Error has occoured. Status Code: ${response.statusCode}";
+      // }
     } catch (e) {
-      return "Error communicating with server $e";
-    }
-  }
-
-  Future<String> login(Credentials credentials) async {
-    try {
-      // Construct the POST request
-      final HttpClientRequest request =
-          await httpClient.postUrl(Uri.parse("$_baseUrl/auth"));
-
-      request.headers.set(HttpHeaders.contentTypeHeader, "application/json");
-
-      // Payload. Mapped key value pairs.
-      Map<String, String> jsonPayload = {
-        "username": credentials.username,
-        "privateKey": credentials.privateKey
-      };
-
-      // Write the payload to the request
-      // request.write(jsonEncode(jsonPayload));
-      request.add(utf8.encode(jsonEncode(jsonPayload)));
-      // Send the request and wait for the response.
-      final response = await request.close();
-
-      String responseBody = await response.transform(utf8.decoder).join();
-      // Read the response.
-      if (response.statusCode == HttpStatus.ok) {
-        _flutterSecureStorage.write(key: 'Authorization', value: responseBody);
-        return "Authorized to take picture";
-      } else if (response.statusCode == HttpStatus.forbidden ||
-          response.statusCode == HttpStatus.unauthorized) {
-        return "Not authorized to take picture";
-      } else {
-        return "Error taking picture";
-      }
-    } catch (e) {
-      print(e);
-      return "";
+      rethrow;
     }
   }
 }
